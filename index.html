@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mercato 26/27 — Summer 2026 Recap</title>
+<style>
+  :root{
+    --bg:#0e1116; --panel:#161b23; --panel2:#1c2230; --line:#262e3d;
+    --text:#e8e9ec; --muted:#8b93a3; --faint:#5b6273;
+    --green:#3ecf8e; --red:#f06a6a; --amber:#e8b34b; --blue:#6aa5f0;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.5}
+  a{color:var(--blue);text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px 80px}
+
+  header{padding:48px 0 26px;border-bottom:1px solid var(--line);margin-bottom:26px}
+  .kicker{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);margin-bottom:10px}
+  h1{font-family:var(--serif);font-weight:600;font-size:38px;letter-spacing:-.01em}
+  .sub{color:var(--muted);margin-top:10px;max-width:760px;font-size:15px}
+  .sub b{color:var(--text);font-weight:600}
+  .note{margin-top:12px;display:inline-block;background:rgba(232,179,75,.09);border:1px solid rgba(232,179,75,.25);
+        color:var(--amber);border-radius:8px;padding:8px 14px;font-size:12.5px;max-width:760px}
+
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:26px 0 10px}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+  .kpi .v{font-size:28px;font-weight:650;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .kpi .l{color:var(--muted);font-size:12px;margin-top:4px}
+  @media(max-width:840px){.kpis{grid-template-columns:repeat(2,1fr)}}
+
+  h2{font-family:var(--serif);font-weight:600;font-size:21px;margin:36px 0 4px}
+  .desc{color:var(--muted);font-size:13px;margin-bottom:14px;max-width:820px}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+
+  svg text{font-family:var(--sans)}
+  .axis{fill:var(--faint);font-size:10.5px}
+
+  .club{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
+  .clubhead{display:flex;align-items:center;gap:14px;padding:14px 18px;flex-wrap:wrap;cursor:pointer;user-select:none}
+  .clubhead:hover{background:var(--panel2)}
+  .caret{color:var(--faint);font-size:12px;width:14px;transition:transform .15s}
+  .club.open .caret{transform:rotate(90deg)}
+  .clubbody{display:none;border-top:1px solid var(--line);overflow-x:auto}
+  .club.open .clubbody{display:block}
+  .crest{width:34px;height:34px;object-fit:contain}
+  .clubhead h3{font-size:17px;font-weight:650;margin-right:auto}
+  .stat{text-align:right;min-width:86px}
+  .stat .sv{font-weight:650;font-variant-numeric:tabular-nums}
+  .stat .sl{color:var(--faint);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em}
+  .xall{background:var(--panel2);color:var(--muted);border:1px solid var(--line);border-radius:8px;
+        padding:6px 14px;cursor:pointer;font-size:12.5px;font-family:var(--sans);margin-left:8px}
+  .xall:hover{color:var(--text)}
+
+  table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+  td{padding:9px 14px;border-bottom:1px solid #1d2330;text-align:right;white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  td.l{text-align:left;white-space:normal}
+  .face{width:30px;height:38px;object-fit:cover;border-radius:5px;vertical-align:middle;background:var(--panel2)}
+  .pname{font-weight:600}
+  .psub{color:var(--faint);font-size:11.5px}
+  .pos{color:var(--green)} .neg{color:var(--amber)} .na{color:var(--faint)}
+  .plc{font-weight:650;width:100px}
+
+  .tip{position:fixed;pointer-events:none;background:#0b0e13;border:1px solid var(--line);
+       border-radius:8px;padding:9px 12px;font-size:12.5px;z-index:50;display:none;
+       box-shadow:0 8px 24px rgba(0,0,0,.5)}
+  .tip b{font-size:13.5px}
+  .tip .m{color:var(--muted)}
+
+  footer{margin-top:54px;padding-top:18px;border-top:1px solid var(--line);color:var(--faint);font-size:12px;line-height:1.7}
+  footer b{color:var(--muted)}
+
+  .brk{display:none}
+  @media(max-width:600px){
+    h1{font-size:30px}
+    .kpi .v{font-size:21px}
+    .wrap{padding:0 14px 60px}
+    .clubhead{gap:9px;padding:12px 12px}
+    .clubhead h3{font-size:15px}
+    .stat{min-width:62px}
+    td{padding:8px 8px}
+    .panel{padding:12px}
+    .brk{display:block;width:100%;height:0}
+    .stat.s-fees{margin-right:auto;text-align:left}
+    .clubbody td{padding:7px 4px;font-size:12.5px}
+    .clubbody td.l:first-child{width:34px;padding-left:8px;padding-right:2px}
+    .face{width:26px;height:33px}
+    .pname{font-size:13px}
+    .psub{font-size:10.5px}
+    td.num{font-size:12px}
+    td.num .psub{display:block;font-size:8.5px;text-transform:uppercase;letter-spacing:.05em}
+    .plc{width:auto;font-size:12.5px;padding-right:8px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">Serie A · Summer 2026</div>
+  <h1>Mercato 26/27 — Summer Recap</h1>
+  <p class="sub">Every paid signing of the summer 2026 window: what each club spent against the player's
+  <b>Transfermarkt value at signing</b>. Fees only — wages and agent costs excluded.</p>
+  <div class="note">⏳ Transfermarkt hasn't revalued players since the window closed — its next league-wide update
+  lands in the autumn. This page will then grow the mark-to-market verdict (value today, unrealized gain/loss),
+  like the <a href="https://jackgriffin83.github.io/mercato-2526/">25/26 report</a>.</div>
+</header>
+
+<div class="kpis" id="kpis"></div>
+
+<h2>The window at a glance</h2>
+<p class="desc">Each club's signings valued at their Transfermarkt value at signing (○) against fees actually paid (●),
+ranked by outlay. An <span style="color:var(--amber)">amber</span> gap is a premium over market value,
+a <span style="color:var(--green)">green</span> gap means the club paid below it. Hover for exact figures; click to open a club.</p>
+<div class="panel"><div id="chart"></div></div>
+
+<h2>Club by club, player by player</h2>
+<p class="desc">Click a club to open its signings — biggest fee first.
+<button class="xall" id="expandAll">Expand all</button><button class="xall" id="collapseAll">Collapse all</button></p>
+<div id="clubs"></div>
+
+<footer>
+  <b>Method.</b> “Value” is the player's Transfermarkt valuation at the time of transfer; premium is fee minus value.
+  Loans, free and undisclosed transfers excluded. A few late loan-to-buy conversions carry a fee but no valuation and
+  are shown without a premium.<br>
+  <b>Sources.</b> Market values and transfer records © <a href="https://www.transfermarkt.com">Transfermarkt</a>.
+  Window data pulled September 5, 2026. Built for personal, non-commercial analysis.
+</footer>
+</div>
+
+<div class="tip" id="tip"></div>
+<script id="data" type="application/json">{"year": 2026, "deals": [{"player": "Gonçalo Ramos", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/550550-1681906158.jpg?lm=4711", "from": "PSG", "to": "AC Milan", "to_id": 5, "date": "2026-06-30", "fee": 74000000.0, "mv_at": 30000000.0}, {"player": "Mario Gila", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/618341-1730127774.jpg?lm=4711", "from": "Lazio", "to": "AC Milan", "to_id": 5, "date": "2026-07-10", "fee": 30000000.0, "mv_at": 30000000.0}, {"player": "Álvaro Morata", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/128223-1719989301.jpg?lm=4711", "from": "AC Milan", "to": "Como", "to_id": 1047, "date": "2026-07-01", "fee": 12000000.0, "mv_at": 6000000.0}, {"player": "Santiago Castro", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/849520-1724827267.jpg?lm=4711", "from": "Bologna", "to": "Roma", "to_id": 12, "date": "2026-07-30", "fee": 36000000.0, "mv_at": 32000000.0}, {"player": "Donyell Malen", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/326029-1711746104.jpg?lm=4711", "from": "Aston Villa", "to": "Roma", "to_id": 12, "date": "2026-07-01", "fee": 25000000.0, "mv_at": 45000000.0}, {"player": "Rodrigo Mora", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/957653-1758830632.jpg?lm=4711", "from": "Porto", "to": "Roma", "to_id": 12, "date": "2026-08-19", "fee": 25000000.0, "mv_at": 38000000.0}, {"player": "Konstantinos Koulierakis", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/669380-1752736071.jpg?lm=4711", "from": "Wolfsburg", "to": "Roma", "to_id": 12, "date": "2026-08-01", "fee": 16500000.0, "mv_at": 25000000.0}, {"player": "Djed Spence", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/483348-1746645656.jpg?lm=4711", "from": "Tottenham", "to": "Inter", "to_id": 46, "date": "2026-08-15", "fee": 30000000.0, "mv_at": 40000000.0}, {"player": "Curtis Jones", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/433188-1701681163.jpg?lm=4711", "from": "Liverpool", "to": "Inter", "to_id": 46, "date": "2026-08-21", "fee": 30000000.0, "mv_at": 35000000.0}, {"player": "Aleksandar Stanković", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/780136-1770972635.jpg?lm=4711", "from": "Club Brugge", "to": "Inter", "to_id": 46, "date": "2026-06-29", "fee": 23000000.0, "mv_at": 32000000.0}, {"player": "Davide Frattesi", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/394300-1730126974.jpg?lm=4711", "from": "inter-mailand", "to": "Lazio", "to_id": 398, "date": "2026-07-01", "fee": 2500000.0, "mv_at": null}, {"player": "David Romero", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/668512-1773678057.jpg?lm=4711", "from": "Tigre", "to": "Parma", "to_id": 130, "date": "2026-08-14", "fee": 7000000.0, "mv_at": 5000000.0}, {"player": "Hans Nicolussi Caviglia", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/430280-1743004805.jpg?lm=4711", "from": "Venezia", "to": "Parma", "to_id": 130, "date": "2026-07-01", "fee": 6000000.0, "mv_at": 6000000.0}, {"player": "Giovanni Daffara", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/814473-1770412165.jpg?lm=4711", "from": "Juve Next Gen", "to": "Parma", "to_id": 130, "date": "2026-07-01", "fee": 6000000.0, "mv_at": 3500000.0}, {"player": "Franco Carboni", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/731491-1675245800.jpg?lm=4711", "from": "Inter", "to": "Parma", "to_id": 130, "date": "2026-07-02", "fee": 2500000.0, "mv_at": 900000.0}, {"player": "Ousmane Diallo", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/962149-1783510507.jpg?lm=4711", "from": "B. Dortmund II", "to": "Parma", "to_id": 130, "date": "2026-07-31", "fee": 1500000.0, "mv_at": 1500000.0}, {"player": "Mateo Pellegrino", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/856530-1751532694.jpg?lm=4711", "from": "Parma", "to": "Fiorentina", "to_id": 430, "date": "2026-08-13", "fee": 22500000.0, "mv_at": 15000000.0}, {"player": "Lorenzo Colombo", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/487843-1730186148.jpg?lm=4711", "from": "AC Milan", "to": "Genoa", "to_id": 252, "date": "2026-07-01", "fee": 7000000.0, "mv_at": 10000000.0}, {"player": "David Puczka", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/715894-1782973384.jpg?lm=4711", "from": "Juve Next Gen", "to": "Genoa", "to_id": 252, "date": "2026-07-02", "fee": 6000000.0, "mv_at": 2500000.0}, {"player": "Cody Drameh", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/531957-1782247650.jpg?lm=4711", "from": "Hull City", "to": "Genoa", "to_id": 252, "date": "2026-09-01", "fee": 4500000.0, "mv_at": 3000000.0}, {"player": "Djibril Sow", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/212723-1779793436.jpg?lm=4711", "from": "Sevilla FC", "to": "Genoa", "to_id": 252, "date": "2026-08-06", "fee": 4000000.0, "mv_at": 7500000.0}, {"player": "Franz-Ethan Meichtry", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/1172166-1771764915.jpg?lm=4711", "from": "FC Thun", "to": "Genoa", "to_id": 252, "date": "2026-07-01", "fee": 4000000.0, "mv_at": 5000000.0}, {"player": "Jeff Ekhator", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/934878-1757663221.jpg?lm=4711", "from": "Genoa", "to": "Juventus", "to_id": 506, "date": "2026-07-01", "fee": 16399999.999999998, "mv_at": 18000000.0}, {"player": "Boulaye Dia", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/626913-1730127040.jpg?lm=4711", "from": "Salernitana", "to": "Lazio", "to_id": 398, "date": "2026-07-01", "fee": 11300000.0, "mv_at": 5000000.0}, {"player": "Lazar Jovanovic", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/897505-1753307294.jpg?lm=4711", "from": "Stuttgart", "to": "Udinese", "to_id": 410, "date": "2026-09-01", "fee": 6500000.0, "mv_at": 3500000.0}, {"player": "Idrissa Gueye", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/1178488-1741265032.jpg?lm=4711", "from": "FC Metz", "to": "Udinese", "to_id": 410, "date": "2026-07-01", "fee": 6000000.0, "mv_at": 8000000.0}, {"player": "Nicolò Zaniolo", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/392085-1713472570.jpg?lm=4711", "from": "Galatasaray", "to": "Udinese", "to_id": 410, "date": "2026-07-01", "fee": 5000000.0, "mv_at": 15000000.0}, {"player": "Alessandro Zanoli", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/397225-1673603620.jpg?lm=4711", "from": "Napoli", "to": "Udinese", "to_id": 410, "date": "2026-07-01", "fee": 5000000.0, "mv_at": 4500000.0}, {"player": "Unai Gómez", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/834752-1709676122.png?lm=4711", "from": "Athletic Club", "to": "Udinese", "to_id": 410, "date": "2026-07-08", "fee": 4500000.0, "mv_at": 5000000.0}, {"player": "Giorgi Chakvetadze", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/412616-1716542553.jpg?lm=4711", "from": "Watford", "to": "Udinese", "to_id": 410, "date": "2026-07-06", "fee": 2550000.0, "mv_at": 3500000.0}, {"player": "Arthur Atta", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/855308-1752140643.jpg?lm=4711", "from": "Udinese", "to": "Fiorentina", "to_id": 430, "date": "2026-07-11", "fee": 25000000.0, "mv_at": 25000000.0}, {"player": "Giovanni Simeone", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/282388-1690294694.jpg?lm=4711", "from": "Napoli", "to": "Torino", "to_id": 416, "date": "2026-07-01", "fee": 7200000.0, "mv_at": 7000000.0}, {"player": "Rolando Mandragora", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/308279-1663591807.jpg?lm=4711", "from": "Fiorentina", "to": "Torino", "to_id": 416, "date": "2026-09-01", "fee": 5000000.0, "mv_at": 9000000.0}, {"player": "Tino Anjorin", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/433181-1751866018.jpg?lm=4711", "from": "FC Empoli", "to": "Torino", "to_id": 416, "date": "2026-07-01", "fee": 4500000.0, "mv_at": 4000000.0}, {"player": "Sandro Kulenović", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/357778-1770273801.jpg?lm=4711", "from": "Dinamo Zagreb", "to": "Torino", "to_id": 416, "date": "2026-07-01", "fee": 3000000.0, "mv_at": 3500000.0}, {"player": "Vanja Milinković-Savić", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/257474-1730125139.jpg?lm=4711", "from": "Torino", "to": "Napoli", "to_id": 6195, "date": "2026-07-01", "fee": 6000000.0, "mv_at": 20000000.0}, {"player": "Sebastian Walukiewicz", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/345458-1716985042.jpg?lm=4711", "from": "Torino", "to": "Sassuolo", "to_id": 6574, "date": "2026-07-01", "fee": 5000000.0, "mv_at": 5000000.0}, {"player": "Christ Inao Oulaï", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/1279526-1756305389.png?lm=4711", "from": "Trabzonspor", "to": "Fiorentina", "to_id": 430, "date": "2026-07-19", "fee": 26000000.0, "mv_at": 23000000.0}, {"player": "Beto", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/595809-1711746870.jpg?lm=4711", "from": "Everton", "to": "Fiorentina", "to_id": 430, "date": "2026-09-01", "fee": 18000000.0, "mv_at": 18000000.0}, {"player": "Viery", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/950393-1784095121.jpg?lm=4711", "from": "Grêmio", "to": "Fiorentina", "to_id": 430, "date": "2026-07-01", "fee": 15000000.0, "mv_at": 6000000.0}, {"player": "Giovanni Fabbian", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/633668-1695027735.jpg?lm=4711", "from": "Bologna", "to": "Fiorentina", "to_id": 430, "date": "2026-07-01", "fee": 13000000.0, "mv_at": 10000000.0}, {"player": "Moise Kean", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/364135-1725532147.jpg?lm=4711", "from": "ac-florenz", "to": "Como", "to_id": 1047, "date": "2026-07-01", "fee": 3000000.0, "mv_at": null}, {"player": "Pietro Comuzzo", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/746712-1730183199.jpg?lm=4711", "from": "ac-florenz", "to": "Torino", "to_id": 416, "date": "2026-07-01", "fee": 1000000.0, "mv_at": null}, {"player": "Matías Moreno", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/1144700-1730183072.jpg?lm=4711", "from": "ac-florenz", "to": "Venezia", "to_id": 607, "date": "2026-07-01", "fee": 250000.0, "mv_at": null}, {"player": "Loïs Openda", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/368887-1713944805.jpg?lm=4711", "from": "Leipzig", "to": "Juventus", "to_id": 506, "date": "2026-07-01", "fee": 42750000.0, "mv_at": 25000000.0}, {"player": "Randal Kolo Muani", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/487969-1718697120.jpg?lm=4711", "from": "PSG", "to": "Juventus", "to_id": 506, "date": "2026-08-02", "fee": 41200000.0, "mv_at": 20000000.0}, {"player": "Kerim Alajbegovic", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/929994-1754993481.png?lm=4711", "from": "Leverkusen", "to": "Juventus", "to_id": 506, "date": "2026-08-02", "fee": 32000000.0, "mv_at": 25000000.0}, {"player": "Jhon Lucumí", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/413565-1753445789.jpg?lm=4711", "from": "Bologna", "to": "Juventus", "to_id": 506, "date": "2026-08-17", "fee": 20100000.0, "mv_at": 22000000.0}, {"player": "Akor Adams", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/607034-1767008026.jpg?lm=4711", "from": "Sevilla FC", "to": "Venezia", "to_id": 607, "date": "2026-07-22", "fee": 16000000.0, "mv_at": 15000000.0}, {"player": "Albion Rrahmani", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/903706-1721802675.png?lm=4711", "from": "Sparta Prague", "to": "Venezia", "to_id": 607, "date": "2026-07-09", "fee": 7500000.0, "mv_at": 7000000.0}, {"player": "Armel Bella-Kotchap", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/467563-1782806917.jpg?lm=4711", "from": "Hellas Verona", "to": "Venezia", "to_id": 607, "date": "2026-07-01", "fee": 7000000.0, "mv_at": 7000000.0}, {"player": "Redouane Halhal", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/913660-1726297099.jpg?lm=4711", "from": "KV Mechelen", "to": "Venezia", "to_id": 607, "date": "2026-08-01", "fee": 5000000.0, "mv_at": 5000000.0}, {"player": "Kornel Lisman", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/1148082-1758475847.png?lm=4711", "from": "Lech Poznan", "to": "Venezia", "to_id": 607, "date": "2026-06-29", "fee": 2500000.0, "mv_at": 600000.0}, {"player": "Ale Gomes", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/1371198-1779142472.jpg?lm=4711", "from": "Real Zaragoza", "to": "Venezia", "to_id": 607, "date": "2026-07-09", "fee": 2000000.0, "mv_at": 500000.0}, {"player": "Bartol Franjic", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/370998-1723486731.png?lm=4711", "from": "Wolfsburg", "to": "Venezia", "to_id": 607, "date": "2026-07-01", "fee": 1250000.0, "mv_at": 1000000.0}, {"player": "Joël Monteiro", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/410787-1646128116.jpg?lm=4711", "from": "Young Boys", "to": "Lecce", "to_id": 1005, "date": "2026-08-31", "fee": 2500000.0, "mv_at": 3500000.0}, {"player": "Francesco Camarda", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/1058368-1751957691.jpg?lm=4711", "from": "us-lecce", "to": "AC Milan", "to_id": 5, "date": "2026-07-01", "fee": 1000000.0, "mv_at": null}, {"player": "Mikel Amondarain", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/1283311-1739829967.jpg?lm=4711", "from": "Estudiantes LP", "to": "Bologna", "to_id": 1025, "date": "2026-07-29", "fee": 10000000.0, "mv_at": 3500000.0}, {"player": "Tommaso Pobega", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/392538-1661767249.jpg?lm=4711", "from": "AC Milan", "to": "Bologna", "to_id": 1025, "date": "2026-07-01", "fee": 7000000.0, "mv_at": 8000000.0}, {"player": "Trevoh Chalobah", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/346314-1773301391.jpg?lm=4711", "from": "Chelsea", "to": "Como", "to_id": 1047, "date": "2026-08-09", "fee": 30000000.0, "mv_at": 40000000.0}, {"player": "Patrick Cutrone", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/265078-1714818222.jpg?lm=4711", "from": "Como", "to": "Monza", "to_id": 2919, "date": "2026-07-01", "fee": 4000000.0, "mv_at": 4000000.0}, {"player": "Mërgim Vojvoda", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/336125-1661351703.jpg?lm=4711", "from": "Como", "to": "Udinese", "to_id": 410, "date": "2026-07-18", "fee": 1500000.0, "mv_at": 2500000.0}, {"player": "Daniel Maldini", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/539134-1695031448.jpg?lm=4711", "from": "cagliari-calcio", "to": "Atalanta", "to_id": 800, "date": "2026-07-01", "fee": 800000.0, "mv_at": null}, {"player": "Gianluca Gaetano", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/358008-1757604842.jpg?lm=4711", "from": "Cagliari", "to": "Atalanta", "to_id": 800, "date": "2026-07-09", "fee": 12000000.0, "mv_at": 6500000.0}, {"player": "Exequiel Zeballos", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/661132-1739899419.jpg?lm=4711", "from": "Boca Juniors", "to": "Monza", "to_id": 2919, "date": "2026-09-01", "fee": 4500000.0, "mv_at": 7000000.0}, {"player": "Gustavo Varela", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/931900-1787552211.jpg?lm=4711", "from": "Benfica B", "to": "Monza", "to_id": 2919, "date": "2026-07-27", "fee": 2500000.0, "mv_at": 3000000.0}, {"player": "Foe Ondoa", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/1143375-1741972151.jpg?lm=4711", "from": "Estoril U23", "to": "Monza", "to_id": 2919, "date": "2026-07-01", "fee": 1500000.0, "mv_at": 750000.0}, {"player": "Rasmus Højlund", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/610442-1757931324.jpg?lm=4711", "from": "Man Utd", "to": "Napoli", "to_id": 6195, "date": "2026-07-01", "fee": 44000000.0, "mv_at": 60000000.0}, {"player": "Luis Hasa", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/724178-1655244826.jpg?lm=4711", "from": "Napoli", "to": "Frosinone", "to_id": 8970, "date": "2026-07-24", "fee": 2500000.0, "mv_at": 4500000.0}, {"player": "Tomas Bobcek", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/510103-1765113841.png?lm=4711", "from": "Lechia Gdansk", "to": "Frosinone", "to_id": 8970, "date": "2026-08-28", "fee": 10700000.0, "mv_at": 8000000.0}, {"player": "Romano Schmid", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/346853-1787231162.jpg?lm=4711", "from": "Werder Bremen", "to": "Frosinone", "to_id": 8970, "date": "2026-08-12", "fee": 8500000.0, "mv_at": 15000000.0}, {"player": "Alessio Zerbin", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/433584-1757604547.jpg?lm=4711", "from": "Napoli", "to": "Frosinone", "to_id": 8970, "date": "2026-07-24", "fee": 2000000.0, "mv_at": 2000000.0}, {"player": "Ben Lhassine Kone", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/522681-1730123598.jpg?lm=4711", "from": "Como", "to": "Frosinone", "to_id": 8970, "date": "2026-07-01", "fee": 1300000.0, "mv_at": 500000.0}, {"player": "Enzo Tchato", "position": null, "nationality": null, "image": "https://img.a.transfermarkt.technology/portrait/medium/842338-1773267690.png?lm=4711", "from": "Montpellier", "to": "Frosinone", "to_id": 8970, "date": "2026-08-25", "fee": 800000.0, "mv_at": 2500000.0}]}</script>
+<script>
+const DB=JSON.parse(document.getElementById('data').textContent);
+const M=v=>v==null?'—':Math.abs(v)>=1e9?'€'+(v/1e9).toFixed(2)+'bn':Math.abs(v)>=1e6?'€'+(v/1e6).toFixed(Math.abs(v)>=20e6?0:1)+'m':'€'+Math.round(v/1e3)+'k';
+const esc=s=>(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const sign=v=>(v>=0?'+':'−')+M(Math.abs(v));
+const tip=document.getElementById('tip');
+function showTip(html,e){tip.innerHTML=html;tip.style.display='block';
+  tip.style.left=Math.min(e.clientX+14,innerWidth-tip.offsetWidth-12)+'px';tip.style.top=(e.clientY+14)+'px'}
+function hideTip(){tip.style.display='none'}
+const openClubs=new Set();
+
+const deals=DB.deals;
+const rated=deals.filter(d=>d.mv_at!=null);
+
+/* KPIs */
+(function(){
+  const fees=deals.reduce((s,d)=>s+d.fee,0);
+  const rf=rated.reduce((s,d)=>s+d.fee,0), rv=rated.reduce((s,d)=>s+d.mv_at,0);
+  document.getElementById('kpis').innerHTML=[
+    {v:M(fees),l:deals.length+' paid signings'},
+    {v:M(rv),l:'combined value at signing'},
+    {v:sign(rf-rv),l:'aggregate premium paid',c:rf-rv>0?'var(--amber)':'var(--green)'},
+    {v:(rf/rv>=1?'+':'−')+Math.round(Math.abs(rf/rv-1)*100)+'%',l:'fees over market value',c:rf>=rv?'var(--amber)':'var(--green)'},
+  ].map(k=>`<div class="kpi"><div class="v" style="color:${k.c||'var(--text)'}">${k.v}</div><div class="l">${k.l}</div></div>`).join('');
+})();
+
+function clubAgg(){
+  const by={};
+  deals.forEach(d=>{(by[d.to]=by[d.to]||{id:d.to_id,ds:[]}).ds.push(d)});
+  return Object.entries(by).map(([club,g])=>{
+    const r=g.ds.filter(d=>d.mv_at!=null);
+    const fees=g.ds.reduce((s,d)=>s+d.fee,0);
+    const rf=r.reduce((s,d)=>s+d.fee,0), rv=r.reduce((s,d)=>s+d.mv_at,0);
+    return {club,id:g.id,ds:g.ds,fees,val:rv,prem:rf-rv,rated:r.length};
+  }).sort((a,b)=>b.fees-a.fees);
+}
+
+/* Chart: value at signing (o) -> fee paid (filled), ranked by outlay */
+(function(){
+  const rows=clubAgg();
+  const W=1020,RH=34,P={l:150,r:120,t:8,b:30},H=P.t+P.b+rows.length*RH;
+  const maxV=Math.max(...rows.map(r=>Math.max(r.fees,r.val)));
+  const x=v=>P.l+v/maxV*(W-P.l-P.r);
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%">`;
+  for(const g of [0,.25,.5,.75,1]){
+    const gx=x(maxV*g);
+    s+=`<line x1="${gx}" y1="${P.t}" x2="${gx}" y2="${H-P.b}" stroke="var(--line)"/>`+
+       `<text class="axis" x="${gx}" y="${H-P.b+16}" text-anchor="middle">${M(maxV*g)}</text>`;
+  }
+  rows.forEach((r,i)=>{
+    const y=P.t+i*RH+RH/2, c=r.prem>0?'var(--amber)':'var(--green)';
+    s+=`<text x="${P.l-10}" y="${y+4}" text-anchor="end" fill="var(--text)" font-size="12.5" font-weight="600">${esc(r.club)}</text>`+
+       `<line x1="${x(r.val)}" y1="${y}" x2="${x(r.fees)}" y2="${y}" stroke="${c}" stroke-width="3.5" stroke-linecap="round" opacity=".55"/>`+
+       `<circle cx="${x(r.val)}" cy="${y}" r="5.5" fill="none" stroke="var(--muted)" stroke-width="1.8"/>`+
+       `<circle cx="${x(r.fees)}" cy="${y}" r="5.5" fill="${c}"/>`+
+       `<text x="${W-P.r+12}" y="${y+4}" font-size="12" font-weight="650" fill="${c}">${sign(r.prem)}</text>`+
+       `<rect data-i="${i}" x="0" y="${P.t+i*RH}" width="${W}" height="${RH}" fill="transparent" style="cursor:pointer"/>`;
+  });
+  s+='</svg>';
+  const el=document.getElementById('chart'); el.innerHTML=s;
+  el.querySelectorAll('rect[data-i]').forEach(rc=>{
+    const r=rows[+rc.dataset.i];
+    rc.addEventListener('mousemove',e=>showTip(
+      `<b>${esc(r.club)}</b> <span class="m">· ${r.ds.length} signings</span><br>`+
+      `Fees paid <b>${M(r.fees)}</b> · value at signing <b>${M(r.val)}</b><br>`+
+      `<span style="color:${r.prem>0?'var(--amber)':'var(--green)'};font-weight:650">premium ${sign(r.prem)}</span>`,e));
+    rc.addEventListener('mouseleave',hideTip);
+    rc.addEventListener('click',()=>{
+      openClubs.add(r.club);
+      const card=[...document.querySelectorAll('.club')].find(c=>c.dataset.club===r.club);
+      if(card){card.classList.add('open');card.scrollIntoView({behavior:'smooth',block:'start'})}
+    });
+  });
+})();
+
+/* Club cards */
+(function(){
+  const rows=clubAgg();
+  document.getElementById('clubs').innerHTML=rows.map(r=>`<div class="club${openClubs.has(r.club)?' open':''}" data-club="${esc(r.club)}">
+    <div class="clubhead">
+      <span class="caret">▶</span>
+      <img class="crest" src="https://tmssl.akamaized.net/images/wappen/head/${r.id}.png" onerror="this.remove()" alt="">
+      <h3>${esc(r.club)}</h3>
+      <div class="stat"><div class="sv">${r.ds.length}</div><div class="sl">signings</div></div>
+      <span class="brk"></span>
+      <div class="stat s-fees"><div class="sv">${M(r.fees)}</div><div class="sl">fees paid</div></div>
+      <div class="stat"><div class="sv">${M(r.val)}</div><div class="sl">value at signing</div></div>
+      <div class="stat"><div class="sv ${r.prem>0?'neg':'pos'}">${sign(r.prem)}</div><div class="sl">premium</div></div>
+    </div>
+    <div class="clubbody"><table><tbody>${[...r.ds].sort((a,b)=>b.fee-a.fee).map(d=>{
+      const prem=d.mv_at==null?null:d.fee-d.mv_at;
+      return `<tr>
+        <td class="l" style="width:46px;padding-right:0"><img class="face" src="${esc(d.image||'')}" onerror="this.style.visibility='hidden'" alt=""></td>
+        <td class="l"><span class="pname">${esc(d.player)}</span><br>
+          <span class="psub">${[d.position,d.nationality,'from '+d.from].filter(Boolean).map(x=>esc(String(x))).join(' · ')}</span></td>
+        <td class="num"><span class="psub">fee</span> ${M(d.fee)}</td>
+        <td class="num"><span class="psub">value</span> ${M(d.mv_at)}</td>
+        <td class="plc ${prem==null?'na':prem>0?'neg':'pos'}">${prem==null?'—':sign(prem)}</td>
+      </tr>`}).join('')}</tbody></table></div></div>`).join('');
+  document.querySelectorAll('.clubhead').forEach(h=>h.addEventListener('click',()=>{
+    const card=h.closest('.club'), name=card.dataset.club;
+    card.classList.toggle('open');
+    card.classList.contains('open')?openClubs.add(name):openClubs.delete(name);
+  }));
+  document.getElementById('expandAll').addEventListener('click',()=>{
+    document.querySelectorAll('.club').forEach(c=>{c.classList.add('open');openClubs.add(c.dataset.club)});
+  });
+  document.getElementById('collapseAll').addEventListener('click',()=>{
+    openClubs.clear();
+    document.querySelectorAll('.club').forEach(c=>c.classList.remove('open'));
+  });
+})();
+</script>
+</body>
+</html>
